@@ -73,5 +73,8 @@
   },
   "1.2.3": {
     "en": "Update dependencies"
+  },
+  "1.2.4": {
+    "en": "Fixed repair views"
   }
 }
