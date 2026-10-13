@@ -5,6 +5,7 @@ const mqtt = require('mqtt');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
+const HomeyPush = require('./lib/push');
 
 module.exports = class ThirdRealityHubApp extends Homey.App {
 
@@ -13,6 +14,8 @@ module.exports = class ThirdRealityHubApp extends Homey.App {
     this.mqttClient = null;
     this._pendingThingIds = new Set();
     this._debugCaptures = new Map(); // thingId -> { active: bool, messages: [] }
+    this.push = new HomeyPush(this);
+    await this.push.startPush();
 
     await this.connectIfLoggedIn();
   }
@@ -209,6 +212,9 @@ module.exports = class ThirdRealityHubApp extends Homey.App {
     if (this.mqttClient) {
       this.mqttClient.end(true);
       this.log('[MQTT] Client destroyed on app uninit');
+    }
+    if (this.push) {
+      this.push.stopPush();
     }
   }
 
